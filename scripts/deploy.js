@@ -1,22 +1,27 @@
 const hre = require('hardhat');
 
-let contractName = 'nft-tutorial';
+//CHANGE NAME CONTRACT DEPLOY
+let contractName = 'VotacaoUrnaEletronica';
 
-async function main() {
+async function main(contractName) {
   const [deployer] = await ethers.getSigners();
-  console.log(`Deploying contracts with the account: ${deployer.address}`);
-  console.log(`Account balance: ${(await deployer.getBalance()).toString()}`);
+  console.log(`Deploying address: ${deployer.address}`);
+  console.log(
+    `Address balance: ${(
+      (await deployer.getBalance()) / 1000000000000000000
+    ).toString()} ETH`,
+  );
 
   const ContractFactory = await hre.ethers.getContractFactory(contractName);
   const contractFactory = await ContractFactory.deploy();
   await contractFactory.deployed();
 
-  console.log('Contract deployed to:', contractFactory.address);
+  console.log('Contract address:', contractFactory.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
-main()
+main(contractName)
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);

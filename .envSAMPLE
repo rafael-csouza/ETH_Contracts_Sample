@@ -1,0 +1,3 @@
+ALCHEMY_RINKEBY_URL= WEBSITE https://www.alchemy.com/
+ETHERSCAN_KEY= WEBSITE https://etherscan.io/myapikey
+PRIVATE_KEY= WEBSITE https://iancoleman.io/bip39/ / https://metamask.io/download/
