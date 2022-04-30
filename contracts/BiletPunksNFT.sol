@@ -8,10 +8,10 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
 /**
- * @title ArcadeLand contract
+ * @title BiletPunksNFT contract
  * @dev Extends ERC721 Non-Fungible Token Standard basic implementation
  */
-contract ArcadeLand is ERC721Enumerable, Ownable {
+contract BiletPunksNFT is ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounterStandardLands;
@@ -20,7 +20,7 @@ contract ArcadeLand is ERC721Enumerable, Ownable {
     Counters.Counter private _tokenIdCounterMegaLands;
 
     bool public onlyWhitelisted = false;
-    bool public openMint = true;
+    bool public openMint = false;
 
     mapping(address => uint256) whitelist;
     mapping(address => uint256) addressList;
@@ -49,7 +49,7 @@ contract ArcadeLand is ERC721Enumerable, Ownable {
 
     bytes32 public whitelistMerkleRoot;
 
-    constructor() ERC721("Arcade Land", "ARCLAND") {
+    constructor() ERC721("BiletPunksNFT", "BLT420") {
         landSpecs[Size.Mega] = LandSpec(3 ether, 100, 1);
         landSpecs[Size.XLarge] = LandSpec(.75 ether, 1900, 101);
         landSpecs[Size.Large] = LandSpec(.5 ether, 3000, 2001);
