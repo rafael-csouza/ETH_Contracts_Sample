@@ -45,11 +45,11 @@ module.exports = {
       gasMultiplier: 2,
       url: process.env.ALCHEMY_RINKEBY_URL,
       accounts: [
-        process.env.PRIVATE_KEY2,
+        process.env.PRIVATE_KEY10,
         process.env.PRIVATE_KEY1,
+        process.env.PRIVATE_KEY2,
         process.env.PRIVATE_KEY3,
         process.env.PRIVATE_KEY4,
-        process.env.PRIVATE_KEY5,
       ],
     },
   },

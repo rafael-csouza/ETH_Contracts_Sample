@@ -1,7 +1,7 @@
 const hre = require('hardhat');
 
 //CHANGE NAME CONTRACT DEPLOY
-let contractName = 'MiaLet420';
+let contractName = 'Hohoho420420';
 
 async function main(contractName) {
   const [deployer] = await ethers.getSigners();
