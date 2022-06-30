@@ -1,27 +1,29 @@
 /*
-KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
-KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKK--Otherside-2D-Characters--KKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKK--Otherside-2D-Characters--KKKKKKKKKKKKKKKKKKKK
 KKKKKKKKKKKKKK'''''''''''''''''''''''''''''''''''''''''KKKKKKKKKKKKKK
 KKKKKKKKKKKKKK'........................................KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'............KKKKKKKKKKKKKKK.............KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'............KK....KKK....KK.............KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'............KK....KKK....KK.............KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'............KKKKKKKKKKKKKKK.............KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'...............KKKKKKKKK................KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'.............KKKKKKKKKKKKK..............KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'.............KKKKKKKKKKKKK..............KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'......KKKKKKKKKKKKKKKKKKKKKKKKKKK.......KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'......KKKKKKKKKKKKKKKKKKKKKKKKKKK.......KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'.............KKKKKKKKKKKKK..............KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'.............KKKKKKKKKKKKK..............KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'.............KKKKKKKKKKKKK..............KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'.............KKKK.....KKKK..............KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'.............KKKK.....KKKK..............KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'.............KKKK.....KKKK..............KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'.............KKKK.....KKKK..............KKKKKKKKKKKKKK
+KKKKKKKKKKKKKK'.............KKKK.....KKKK..............KKKKKKKKKKKKKK
 KKKKKKKKKKKKKK'........................................KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'............|||||FIRE|||||..............KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'..............|||FIRE|||................KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'................|FIRE|..................KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'................|FIRE|..................KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'............KKKKKKKKKKKKKKK.............KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'............KKKKKKKKKKKKKKK.............KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'............KKKKKKKKKKKKKKK.............KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'............KKKKKKKKKKKKKKK.............KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'............KKKKKKKKKKKKKKK.............KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'............KKKKKKKKKKKKKKK.............KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'............KKKKKKKKKKKKKKK.............KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'............KKKKKKKKKKKKKKK.............KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'............KKKKKKKKKKKKKKK.............KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'............KKKKKKKKKKKKKKK.............KKKKKKKKKKKKKK
-KKKKKKKKKKKKKK'............KKKKKKKKKKKKKKK.............KKKKKKKKKKKKKK
 KKKKKKKKKKKKKK'''''''''''''''''''''''''''''''''''''''''KKKKKKKKKKKKKK
-KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
-KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKK--Otherside-2D-Characters--KKKKKKKKKKKKKKKKKKKK
+KKKKKKKKKKKKKKKKKKKKKK--Otherside-2D-Characters--KKKKKKKKKKKKKKKKKKKK
 */
 
 // SPDX-License-Identifier: MIT
@@ -36,38 +38,73 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  */
 
 contract Hohoho420420 is ERC721A, Ownable {
-    uint256 MAX_MINTS = 50;
-    uint256 MAX_SUPPLY = 100;
-    uint256 public mintRate = 0.0001 ether;
+    uint256 public constant MAX_MINTS = 10;
+    uint256 public constant MAX_SUPPLY = 10000;
+    uint256 public constant MAX_MINTS_FREE = 3;
+    uint256 public constant FREE_MAX_SUPPLY = 1000;
+    uint256 public mintRate = 0.002 ether;
     bool public openMint = true;
-    bool public revealed = true;
-
-    string public contractURI =
-        "https://api-next-js-hazel.vercel.app/api/contractURI";
-    string public baseURI = "https://api-next-js-hazel.vercel.app/metadata/";
+    bool public revealed = false;
+    string public contractURI = "https://tibiaverse.com/api/opensea_meta/";
+    string public baseURI = "https://tibiaverse.com/api/opensea_meta/";
 
     constructor() ERC721A("Hohoho420420", "MBLT") {}
 
+    /******************** PUBLIC ********************/
     function mint(uint256 quantity) external payable {
+        require(msg.sender == tx.origin, "Not allowed.");
         require(openMint, "Minting not enable.");
         require(
             quantity + _numberMinted(msg.sender) <= MAX_MINTS,
-            "Exceeded the limit."
+            "Excess max mint."
         );
         require(
             totalSupply() + quantity <= MAX_SUPPLY,
             "Not enough tokens left."
         );
-        require(msg.value >= (mintRate * quantity), "Not enough ether.");
+        if (FREE_MAX_SUPPLY >= totalSupply()) {
+            require(MAX_MINTS_FREE >= quantity, "Excess max free mint.");
+        } else {
+            require(msg.value >= (mintRate * quantity), "Not enough ether.");
+        }
         _safeMint(msg.sender, quantity);
-    }
-
-    function withdraw() external payable onlyOwner {
-        payable(owner()).transfer(address(this).balance);
     }
 
     function _baseURI() internal view override returns (string memory) {
         return baseURI;
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override
+        returns (string memory)
+    {
+        require(
+            _exists(tokenId),
+            "ERC721Metadata: URI query for nonexistent token"
+        );
+        string memory baseURI_ = _baseURI();
+        if (revealed) {
+            return
+                bytes(baseURI_).length > 0
+                    ? string(
+                        abi.encodePacked(baseURI_, Strings.toString(tokenId))
+                    )
+                    : "";
+        } else {
+            return string(abi.encodePacked(baseURI_, "TokenUri"));
+        }
+    }
+
+    /******************** OWNER ********************/
+    function mint500ForTeam() external onlyOwner {
+        require(totalSupply() + 500 <= MAX_SUPPLY, "Not enough tokens left.");
+        _safeMint(_msgSender(), 500);
+    }
+
+    function withdraw() external payable onlyOwner {
+        payable(owner()).transfer(address(this).balance);
     }
 
     function flipMintState() public onlyOwner {
@@ -82,36 +119,11 @@ contract Hohoho420420 is ERC721A, Ownable {
         mintRate = _mintRate;
     }
 
-    function setContracURI(string memory _newContractURI) public onlyOwner {
-        contractURI = _newContractURI;
-    }
-
     function setBaseURI(string memory _newBaseURI) external onlyOwner {
         baseURI = _newBaseURI;
     }
 
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override
-        returns (string memory)
-    {
-        require(
-            _exists(tokenId),
-            "ERC721Metadata: URI query for nonexistent token"
-        );
-
-        string memory baseURI_ = _baseURI();
-
-        if (revealed) {
-            return
-                bytes(baseURI_).length > 0
-                    ? string(
-                        abi.encodePacked(baseURI_, Strings.toString(tokenId))
-                    )
-                    : "";
-        } else {
-            return string(abi.encodePacked(baseURI_, "hidden"));
-        }
+    function setContractURI(string memory _newContractURI) public onlyOwner {
+        contractURI = _newContractURI;
     }
 }
